@@ -1,9 +1,17 @@
 import React from 'react'
+import "../src/App.css"
 
-function App() {
+function Button() {
   return (
-    <div>This is test</div>
+    <button>나를 눌러봐요!</button>
   )
 }
 
-export default App
+export default function App() {
+  return (
+    <div>
+      <h2>Hello</h2>
+      <Button/>
+    </div>
+  )
+}
