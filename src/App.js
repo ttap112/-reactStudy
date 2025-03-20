@@ -1,17 +1,28 @@
 import React from 'react'
-import "../src/App.css"
 
-function Button() {
+function Square( { value }) {
+  return <button className='square'>{value}</button>;
+}
+
+export default function Board() {
   return (
-    <button>나를 눌러봐요!</button>
+    <>
+      <div className='board-low'>
+        <Square value="1"/>
+        <Square value="2"/>
+        <Square value="3"/>
+      </div>
+      <div className='board-low'>
+        <Square value="4"/>
+        <Square value="5"/>
+        <Square value="6"/>
+      </div>
+      <div className='board-low'>
+        <Square value="7"/>
+        <Square value="8"/>
+        <Square value="9"/>
+      </div>
+    </>
   )
 }
 
-export default function App() {
-  return (
-    <div>
-      <h2>Hello</h2>
-      <Button/>
-    </div>
-  )
-}
