@@ -1,12 +1,170 @@
+/* 기본 스타일 초기화 */
 * {
-  margin: 0px;
-  padding: 0px;
+  margin: 0;
+  padding: 0;
 }
 
+/* 헤더 스타일 */
 header {
   width: auto;
   height: 60px;
   line-height: 60px;
+  padding: 10px;
+}
+
+/* 홈 버튼 */
+.homeButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 200px;
+  height: 40px;
+  background-color: rgb(98, 141, 233);
+  color: white;
+  font-weight: bold;
+  border: none;
+  border-radius: 15px;
+}
+
+.homeButton img {
+  height: 20px;
+  width: 20px;
+  margin-right: 10px;
+}
+
+.homeButton p {
+  margin: 0;
+}
+
+/* 섹션 스타일 */
+section {
+  margin: 40px 0;
+}
+
+/* 박스 스타일 */
+.Box {
+  font-family: Gaegu, sans-serif;
+  width: 700px;
+  height: 500px;
+  text-align: center;
+  margin: 0 auto;
+  box-shadow: 0 0 30px rgb(117, 115, 115);
+}
+
+/* 제목 스타일 */
+.mainHeader {
+  font-size: 25px;
+  padding: 80px 0 70px;
+  text-decoration: underline 2px rgb(173, 173, 173);
+  text-underline-position: under;
+}
+
+/* 결과 섹션 */
+.resultSet {
+  padding-top: 15px;
+}
+
+/* 결과 박스 공통 스타일 */
+.ResultView {
+  margin: 0 auto;
+  width: 450px;
+  height: 70px;
+  border-radius: 15px;
+  box-shadow: 3px 3px 5px rgb(206, 206, 206);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  font-weight: bold;
+}
+
+/* 성공/오류 메시지 */
+.ResultView.success {
+  background-color: #dff0d8;
+  color: #3c763d;
+  border: 1px solid #c3e6cb;
+}
+
+.ResultView.error {
+  background-color: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+}
+
+/* 입력 필드 스타일 */
+input[type="text"] {
+  width: 400px;
+  height: 30px;
+  border-radius: 5px;
+  border: solid 1px rgb(172, 172, 172);
+  box-shadow: 3px 3px 15px rgb(202, 202, 202);
   padding-left: 10px;
-  
+}
+
+.inputStyle {
+  padding-bottom: 10px;
+}
+
+/* 버튼 공통 스타일 */
+button {
+  width: 160px;
+  height: 40px;
+  border: none;
+  background-color: rgb(98, 141, 233);
+  color: white;
+  font-size: 16px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+/* 결과 버튼 */
+.resultButton {
+  font-weight: bold;
+  font-family: Gaegu, sans-serif;
+  background-color: rgb(38, 179, 26);
+  font-size: 20px;
+  margin: 10px 0;
+  width: 120px;
+  border-radius: 15px;
+}
+
+/* 버튼 컨테이너 */
+.buttonSet {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  margin-top: 20px;
+}
+
+.buttonOne, .buttonTwo, .buttonThree {
+  padding: 0 20px;
+}
+
+/* 오류 버튼 */
+.errorButton {
+  background-color: #f44336;
+}
+
+/* 성공 버튼 */
+.successButton {
+  color: rgb(255, 255, 255);
+  background-color: #87cefa;
+  font-weight: bold;
+  transition: background-color 0.3s ease-in-out;
+}
+
+/* 버튼 흔들기 애니메이션 */
+@keyframes shake {
+  0% { transform: translateX(0); }
+  25% { transform: translateX(-10px); }
+  50% { transform: translateX(10px); }
+  75% { transform: translateX(-10px); }
+  100% { transform: translateX(0); }
+}
+
+.shake {
+  animation: shake 0.5s ease-in-out;
+  animation-iteration-count: 1;
 }
