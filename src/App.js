@@ -58,11 +58,11 @@ function HumanInput({ wordList, wordResult, setWordList, setWordResult }) {
     <>
       <div className="inputStyle">
         <h3>사용할 단어 조각 입력 ( 쉼표로 구분 )</h3>
-        <input type="text" placeholder="예 : ba, na, n, a" value={wordList} onChange={handleWordListChange} />
+        <input type="text" placeholder="예 : ba, na, n, a"  value={wordList} onChange={handleWordListChange}  style={{ fontFamily: "Gaegu, sans-serif", fontSize:"20px"}} />
       </div>
       <div>
         <h3>완성할 문자열</h3>
-        <input type="text" placeholder="예 : banana" value={wordResult} onChange={handleWordChange} />
+        <input type="text" placeholder="예 : banana" value={wordResult} onChange={handleWordChange}  style={{ fontFamily: "Gaegu, sans-serif",fontSize:"20px" }} />
       </div>
     </>
   );
@@ -77,8 +77,8 @@ function Result({ wordList, wordResult, setWordList, setWordResult }) {
   const [isLoading, setIsLoading] = useState(false); // 로딩 상태 추가
 
   const handleResultClick = () => {
-    if (isLoading || isSuccess || error) return; // 실행 중이거나 성공/에러 상태이면 아무 동작 안 함
-  
+    if (isLoading || isSuccess || error) return;
+
     if (!wordList || !wordResult) {
       setError(true);
       setButtonError(true);
@@ -93,72 +93,89 @@ function Result({ wordList, wordResult, setWordList, setWordResult }) {
       setButtonError(false);
       setIsSuccess(false);
       setIsReturning(false);
-      setIsLoading(true);
-  
+      setIsLoading(true); // 로딩 시작
+
       setTimeout(() => {
         setIsSuccess(true);
-        setIsLoading(false);
-  
+        setIsLoading(false); // 로딩 종료
+
         setTimeout(() => {
           setIsReturning(true);
         }, 3000);
       }, 3000);
     }
+    
+  };
+  const handleReset = () => {
+    setWordList([]);
+    setWordResult("");
+    setIsSuccess(false);
+    setIsReturning(false);
   };
   
-  const handleReset = () => {
-    // 🔹 모든 상태를 완전히 초기화
-    setWordList('');
-    setWordResult('');
-    setError(false);
-    setButtonError(false);
-    setIsShaking(false);
-    setIsSuccess(false);
-    setIsLoading(false);
-    
-    // 🔹 isReturning을 false로 변경하여 "결과보기" 버튼으로 복귀
-    setTimeout(() => {
-      setIsReturning(false);
-    }, 0);
-  };
 
   return (
     <div>
-  <button
-    onClick={isReturning ? handleReset : handleResultClick}
-    className={`resultButton 
-      ${buttonError ? 'errorButton' : ''} 
-      ${isShaking ? 'shake' : ''} 
-      ${isSuccess ? 'successButton' : ''}`}
-    disabled={error || isLoading || (isSuccess && !isReturning)} // 성공 후 3초 동안 클릭 방지
-  >
-    {isReturning ? '돌아가기' : isLoading ? LoadingScreen : isSuccess ? '성공' : '결과보기'}
-  </button>
-      <div className={`ResultView ${error ? 'error' : ''} ${isSuccess ? 'success' : ''}`}>
-        {error ? '❗ 문자가 입력되지 않았습니다.' : 
-          isSuccess ? calculate(wordList,wordResult): '❓결과가 여기에 표시됩니다.'}
-      </div>
+      {isLoading && <LoadingScreen onLoaded={() => setIsLoading(false)} />} {/* 🔹 로딩 화면 표시 */}
+      {!isLoading && (
+        <>
+          <button
+            onClick={isReturning ? handleReset : handleResultClick}
+            className={`resultButton 
+              ${buttonError ? "errorButton" : ""} 
+              ${isShaking ? "shake" : ""} 
+              ${isSuccess ? "successButton" : ""}`}
+            disabled={error || isLoading || (isSuccess && !isReturning)}
+          >
+            {isReturning ? "돌아가기" : isSuccess ? "성공" : "결과보기"}
+          </button>
+          <div className={`ResultView ${error ? "error" : ""} ${isSuccess ? "success" : ""}`}>
+            {error
+              ? "❗ 문자가 입력되지 않았습니다."
+              : isSuccess
+              ? calculate(wordList, wordResult)
+              : "❓결과가 여기에 표시됩니다."}
+          </div>
+        </>
+      )}
     </div>
   );
 }
 
-
 function calculate(wordList, wordResult) {
   const inf = 20001;
-  const wordArr = wordList.split(',').map(word => word.trim());
-  const  wordLen = wordResult.length;
+
+  // 입력된 단어들을 배열로 변환, 빈 문자열 제거
+  const wordArr = wordList
+    .split(',')
+    .map(word => word.trim())
+    .filter(word => word.length > 0);
+
+  const wordLen = wordResult.length;
+  if (wordArr.length === 0 || wordLen === 0) return "❗ 단어 조각과 목표 문자열을 입력하세요.";
+
+  // DP 배열 초기화
   const dp = new Array(wordLen + 1).fill(inf);
   dp[0] = 0;
 
-  for (var i = 1; i <= wordLen; i++) { 
-    for (var word of wordArr) {
-      if (i >= word.length && wordResult.startsWith(word, i - word.length)) { 
-        dp[i] = Math.min(dp[i], dp[i - word.length] + 1);
+  // DP 계산
+  for (let i = 1; i <= wordLen; i++) {
+    for (let word of wordArr) {
+      const startIdx = i - word.length;
+      if (startIdx >= 0 && wordResult.startsWith(word, startIdx)) {
+        dp[i] = Math.min(dp[i], dp[startIdx] + 1);
       }
     }
   }
-  return dp[wordLen] === inf ? "문자를 만들 수 없습니다. : "-1 : wordResult+"를 만들기 위해 총"+dp[wordLen]+"개가 사용됐습니다."
+
+  // 결과 반환
+  if (dp[wordLen] === inf) {
+    return "❌ 문자를 만들 수 없습니다. ";
+  } else {
+    return `✅ '${wordResult}'를 만들기 위해 총 ${dp[wordLen]}개가 사용됐습니다.`;
+  }
 }
+
 
 function BottomButton() {
   const [isQuestionModalOpen, setIsQuestionModalOpen] = useState(false);

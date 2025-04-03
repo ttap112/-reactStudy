@@ -1,35 +1,42 @@
-import { useEffect, useState } from "react";
-import logo from "./assets1/로고_최종파일_2_남색배경.png"; // 상대 경로 수정
-import "./LoadingStyle.css"; // 스타일 적용
+import { useEffect, useState, useRef, useCallback } from "react";
+import logo from "./assets1/로고_최종파일_2_남색배경-removebg-preview.png";
+import "./LoadingStyle.css";
 
 export default function LoadingScreen({ onLoaded }) {
-  const [progress, setProgress] = useState(0); // 로딩 진행 상태
+  const [progress, setProgress] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
+  const intervalRef = useRef(null);
+  const timeoutRef = useRef(null);
+
+  const handleLoadComplete = useCallback(() => {
+    setIsLoading(false);
+    onLoaded();
+  }, [onLoaded]);
 
   useEffect(() => {
-    const interval = setInterval(() => {
+    intervalRef.current = setInterval(() => {
       setProgress((prev) => {
-        if (prev >= 100) {
-          clearInterval(interval);
-          setTimeout(() => {
-            setIsLoading(false);
-            onLoaded();
-          }, 500); // 100% 후에 onLoaded 실행
+        if (prev + 5 >= 100) {
+          clearInterval(intervalRef.current);
+          timeoutRef.current = setTimeout(handleLoadComplete, 500);
           return 100;
         }
-        return prev + 5; // 5%씩 증가
+        return prev + 5;
       });
     }, 150);
 
-    return () => clearInterval(interval);
-  }, [onLoaded]);
+    return () => {
+      clearInterval(intervalRef.current);
+      clearTimeout(timeoutRef.current);
+    };
+  }, [handleLoadComplete]);
 
-  if (!isLoading) return null; // 로딩이 끝나면 화면에서 제거
+  if (!isLoading) return null;
 
   return (
     <div className="loading-container">
       <div className="loading-box">
-        <img src={logo} alt="Logo" width={200} height={200} />
+        <img src={logo} alt="Logo" width={600} height={500} />
         <div className="loading-bar">
           <div className="loading-progress" style={{ width: `${progress}%` }}></div>
         </div>
