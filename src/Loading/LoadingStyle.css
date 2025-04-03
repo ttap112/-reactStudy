@@ -1,0 +1,43 @@
+.loading-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: #0A1F56;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  transition: opacity 0.3s ease-in-out;
+}
+
+.loading-box {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.loading-bar {
+  width: 80%;
+  height: 10px;
+  background-color: #ddd;
+  border-radius: 5px;
+  overflow: hidden;
+  margin-top: 10px;
+}
+
+.loading-progress {
+  height: 100%;
+  background-color: #4caf50;
+  width: 0%;
+  transition: width 0.15s linear;
+}
+
+.loading-text {
+  margin-top: 5px;
+  font-size: 14px;
+  color: white;
+}
