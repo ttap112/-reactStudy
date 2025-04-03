@@ -48,14 +48,14 @@ section {
   height: 500px;
   text-align: center;
   margin: 0 auto;
-  box-shadow: 0 0 30px rgb(117, 115, 115);
+  box-shadow: 0 0 2cap rgb(150, 150, 150);
 }
 
 /* 제목 스타일 */
 .mainHeader {
   font-size: 25px;
   padding: 80px 0 70px;
-  text-decoration: underline 2px rgb(173, 173, 173);
+  text-decoration: underline 2px rgb(214, 214, 214);
   text-underline-position: under;
 }
 
@@ -70,12 +70,13 @@ section {
   width: 450px;
   height: 70px;
   border-radius: 15px;
-  box-shadow: 3px 3px 5px rgb(206, 206, 206);
+  box-shadow: 3px 3px 5px rgb(143, 141, 141);
   display: flex;
   justify-content: center;
   align-items: center;
   text-align: center;
   font-weight: bold;
+  background-color: rgba(201, 187, 187, 0.342);
 }
 
 /* 성공/오류 메시지 */
@@ -97,7 +98,7 @@ input[type="text"] {
   height: 30px;
   border-radius: 5px;
   border: solid 1px rgb(172, 172, 172);
-  box-shadow: 3px 3px 15px rgb(202, 202, 202);
+  box-shadow: 3px 3px 15px rgb(170, 170, 170);
   padding-left: 10px;
 }
 

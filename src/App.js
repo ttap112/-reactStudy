@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import "./App.css";
 import homeIcon from "./assets/mdi-home-icon.png";
+import { ExampleDescriptionModal, QuestionModal, SubmitProposalModal } from "./Modal";
 
 export default function WordPuzzle() {
   return <PuzzleView />;
@@ -31,19 +32,7 @@ function PuzzleView() {
           </div>
         </div>
       </section>
-      <footer>
-        <div className="buttonSet">
-          <div className="buttonOne">
-            <button className="QuestionView">문제 보기</button>
-          </div>
-          <div className="buttonTwo">
-            <button className="submitProposal">제한 사항</button>
-          </div>
-          <div className="buttonThree">
-            <button className="exampleDescription">예시 설명</button>
-          </div>
-        </div>
-      </footer>
+      <BottomButton/>
     </>
   );
 }
@@ -98,7 +87,7 @@ function Result({ wordList, wordResult, setWordList, setWordResult }) {
 
       setTimeout(() => {
         setIsReturning(true);
-      }, 5000);
+      }, 3000);
     }
   };
 
@@ -129,12 +118,50 @@ function Result({ wordList, wordResult, setWordList, setWordResult }) {
   );
 }
 
-function calculate({wordList,wordResult}) {
-  let ResultWord = 0;
-  const inf = 20001; 
+function calculate(wordList, wordResult) {
+  const inf = 20001;
   const wordArr = wordList.split(',').map(word => word.trim());
-  let wordLen = wordResult.length();
-  let dp = new Array(wordLen + 1).fill(inf);
+  const  wordLen = wordResult.length;
+  const dp = new Array(wordLen + 1).fill(inf);
+  dp[0] = 0;
 
-  return ResultWord;
+  for (var i = 1; i <= wordLen; i++) { 
+    for (var word of wordArr) {
+      if (i >= word.length && wordResult.startsWith(word, i - word.length)) { 
+        dp[i] = Math.min(dp[i], dp[i - word.length] + 1);
+      }
+    }
+  }
+  return dp[wordLen] === inf ? "문자를 만들 수 없습니다. : "+-1 : wordResult+"를 만들기 위해 총"+dp[wordLen]+"개가 사용됐습니다."
+}
+
+function BottomButton() {
+  const [isQuestionModalOpen, setIsQuestionModalOpen] = useState(false);
+  const [isSubmitModalOpen, setIsSubmitModalOpen] = useState(false);
+  const [isExampleModalOpen, setIsExampleModalOpen] = useState(false);
+
+  return(
+    <footer>
+      <div className="buttonSet">
+        <div className="buttonOne">
+          <button className="QuestionView" onClick={() => setIsQuestionModalOpen(true)}>
+            문제 보기
+          </button>
+          <QuestionModal isOpen={isQuestionModalOpen} onClose={() => setIsQuestionModalOpen(false)} />
+        </div>
+        <div className="buttonTwo">
+          <button className="submitProposal" onClick={() => setIsSubmitModalOpen(true)}>
+            제한 사항
+          </button>
+          <SubmitProposalModal isOpen={isSubmitModalOpen} onClose={() => setIsSubmitModalOpen(false)} />
+        </div>
+        <div className="buttonThree">
+          <button className="exampleDescription" onClick={() => setIsExampleModalOpen(true)}>
+            예시 설명
+          </button>
+          <ExampleDescriptionModal isOpen={isExampleModalOpen} onClose={() => setIsExampleModalOpen(false)} />
+        </div>
+      </div>
+    </footer>
+  );
 }
